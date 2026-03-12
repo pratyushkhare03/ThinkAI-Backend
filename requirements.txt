@@ -4,7 +4,8 @@ pillow==11.3.0
 PyMySQL==1.1.2
 sqlparse==0.5.3
 tzdata==2025.2
-django-cors-headers
-gunicorn
-google-genai
-python-dotenv
+django-cors-headers==4.6.0
+gunicorn==23.0.0
+google-genai==1.7.0
+python-dotenv==1.1.0
+youtube-transcript-api==0.6.3
