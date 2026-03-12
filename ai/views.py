@@ -1,17 +1,28 @@
 from django.shortcuts import render
+import os
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from google import genai
 
-# Gemini Client setup
-client = genai.Client(
-    api_key="AIzaSyCScg7BBvDw3ho9yDMJEHyD1vwewaggBTw"
-)
+_genai_client = None
+
+
+def get_genai_client():
+    global _genai_client
+    if _genai_client is not None:
+        return _genai_client
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not set")
+
+    _genai_client = genai.Client(api_key=api_key)
+    return _genai_client
 
 SYSTEM_PROMPT = """
-You are an educational AI assistant created by Apurva, named NotesBuddy.
+You are an educational AI assistant created by Pratyush, named NotesBuddy.
 
 Primary Behavior:
 - First, identify the intent of the user's input.
@@ -50,7 +61,7 @@ Content Focus:
 Restrictions (Mandatory):
 - Never mention Google, Gemini, or any AI model name.
 - Never say “I am powered by” or similar phrases.
-- If authorship is mentioned, always state: “Created by Apurva”.
+- If authorship is mentioned, always state: “Created by Pratyush”.
 
 Behavior Guidelines:
 - Be concise and helpful.
@@ -146,7 +157,7 @@ Generate study questions from these notes:
         instruction = action_prompts.get(action, action_prompts["organize"])
         
         SYSTEM_PROMPT = f"""
-You are an AI study assistant created by Apurva.
+You are an AI study assistant created by Pratyush.
 
 Task: {instruction}
 
@@ -212,7 +223,7 @@ def enhance_notes(request):
             return JsonResponse({"error": "Notes required"}, status=400)
         
         SYSTEM_PROMPT = f"""
-You are an AI study assistant created by Apurva.
+You are an AI study assistant created by Pratyush.
 
 Task: Enhance these notes by adding {enhancement_type}.
 
@@ -260,7 +271,7 @@ def extract_key_points(request):
             return JsonResponse({"error": "Notes required"}, status=400)
         
         SYSTEM_PROMPT = f"""
-You are an AI study assistant created by Apurva.
+You are an AI study assistant created by Pratyush.
 
 Task: Extract the key points and main ideas from these notes.
 
@@ -330,7 +341,7 @@ def generate_quiz(request):
             )
 
         SYSTEM_PROMPT = f"""
-You are an AI quiz generator created by Apurva.
+You are an AI quiz generator created by Pratyush.
 
 Task: Create a {difficulty} difficulty quiz with {num_questions} multiple-choice questions based on the provided content.
 
@@ -443,7 +454,7 @@ def generate_flashcards(request):
         instruction = card_instructions.get(card_type, card_instructions["definition"])
         
         SYSTEM_PROMPT = f"""
-You are an AI flashcard generator created by Apurva.
+You are an AI flashcard generator created by Pratyush.
 
 Task: Create {num_cards} educational flashcards based on the provided content.
 
@@ -588,7 +599,7 @@ def generate_summary(request):
         focus_instruction = focus_instructions.get(focus, focus_instructions["general"])
         
         SYSTEM_PROMPT = f"""
-You are an AI summarization assistant created by Apurva.
+You are an AI summarization assistant created by Pratyush.
 
 Task: Create a structured summary of the following content.
 

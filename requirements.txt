@@ -7,3 +7,4 @@ tzdata==2025.2
 django-cors-headers
 gunicorn
 google-genai
+python-dotenv
