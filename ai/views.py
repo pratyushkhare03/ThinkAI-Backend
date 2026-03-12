@@ -73,6 +73,7 @@ Behavior Guidelines:
 def chat(request):
     if request.method == "POST":
         try:
+            client = get_genai_client()
             data = json.loads(request.body)
             user_msg = data.get("message", "")
 
@@ -107,6 +108,7 @@ def process_notes(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         
         # Extract transcript from frontend
@@ -215,6 +217,7 @@ def enhance_notes(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         notes = data.get("notes", "")
         enhancement_type = data.get("type", "details")  # details, examples, definitions
@@ -264,6 +267,7 @@ def extract_key_points(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         notes = data.get("notes", "")
         
@@ -318,6 +322,7 @@ def generate_quiz(request):
         return JsonResponse({"error": "POST request required"}, status=405)
 
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
 
         # Extract parameters from frontend
@@ -420,6 +425,7 @@ def generate_flashcards(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         
         # Extract parameters from frontend
@@ -541,6 +547,7 @@ def generate_summary(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         
         # Extract parameters
@@ -718,6 +725,7 @@ def compare_summaries(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         content = data.get("content", "")
         
@@ -755,6 +763,7 @@ def extract_keywords(request):
         return JsonResponse({"error": "POST request required"}, status=405)
     
     try:
+        client = get_genai_client()
         data = json.loads(request.body)
         content = data.get("content", "")
         
